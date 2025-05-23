@@ -1,0 +1,24 @@
+diff --git a/src/battle.cpp b/src/battle.cpp
+index fdbf684..41724bc 100644
+--- a/src/battle.cpp
++++ b/src/battle.cpp
+@@ -6,7 +6,18 @@ void Warrior::reset_debuff() {
+ 
+ void Warrior::afflict(){}
+ 
+-void Arena::combat( Warrior a, Warrior b ){}
++void Arena::combat(){
++    Warrior& a = list_of_warriors[ONE];
++    Warrior& b = list_of_warriors[TWO];
++
++    Dice dado;
++    while (a.dyn_stats[HEALTH] > 0 || b.dyn_stats[HEALTH] > 0) {
++        /// Turn Order
++        if (dado.RNG(0, 1) == 0) {
++
++        };
++    }
++}
+ 
+ int Dice::RNG(int min, int max){
+     return 0;
