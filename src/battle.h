@@ -26,13 +26,13 @@ class Warrior {
 public:
     std::string name;
 
-    stat max_health;
-    stat atk_debuff;
+    stat max_health{100};
+    stat atk_debuff{0};
 
-    /// Static stats - Strength, Defense and Healing
+    /// Static stats - Strength, Defense and Healing (Out of 100)
     std::array<stat, 3> stat_stats;
 
-    /// Dynamic stats - Attack and Health
+    /// Dynamic stats - Attack and Health (Out of 100)
     std::array<stat, 2> dyn_stats;
 
     void afflict();
