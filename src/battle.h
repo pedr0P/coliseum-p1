@@ -26,7 +26,7 @@ class Warrior {
 public:
     std::string name;
 
-    stat health;
+    stat max_health;
     stat atk_debuff;
 
     /// Static stats - Strength, Defense and Healing
