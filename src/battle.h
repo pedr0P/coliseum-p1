@@ -1,6 +1,9 @@
 #include <array>
 #include <string>
 
+/// Integer type for tracking stats.
+typedef unsigned stat;
+
 //== Enumerations
 enum action {
     ATTACK,
@@ -19,9 +22,6 @@ enum player {
     TWO
 };
 
-/// Integer type for tracking stats.
-typedef unsigned stat;
-
 class Warrior {
 public:
     std::string name;
@@ -38,7 +38,6 @@ public:
     void afflict();
     void reset_debuff();
 };
-
 
 class Arena {
     std::array<Warrior, 2> list_of_warriors;
