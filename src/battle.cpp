@@ -6,7 +6,7 @@ void Warrior::reset_debuff() {
 
 void Warrior::afflict(){}
 
-void Arena::combat(){}
+void Arena::combat( Warrior a, Warrior b ){}
 
 int Dice::RNG(int min, int max){
     return 0;

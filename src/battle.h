@@ -12,14 +12,13 @@ enum action {
 };
 
 enum stat_field {
-    STRENGTH,
-    DEFENSE,
-    HEALING
+    OFFENSE,
+    HEALTH
 };
 
 enum player {
-    ONE,
-    TWO
+    PONE,
+    PTWO
 };
 
 class Warrior {
@@ -32,7 +31,7 @@ public:
     /// Static stats - Strength, Defense and Healing (Out of 100)
     std::array<stat, 3> stat_stats;
 
-    /// Dynamic stats - Attack and Health (Out of 100)
+    /// Dynamic stats - Offense and Health (Out of 100)
     std::array<stat, 2> dyn_stats;
 
     void afflict();
@@ -40,12 +39,14 @@ public:
 };
 
 class Arena {
+public:
     std::array<Warrior, 2> list_of_warriors;
     
     void combat();
 };
 
 class Dice{
+public:
     /// Random Number Generator
     int  RNG(int min, int max);
     /// Weighted Random Number Generator
