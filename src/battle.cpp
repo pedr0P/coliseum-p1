@@ -23,26 +23,23 @@ void Warrior::attack(Warrior &target) {
 
         if ( roll == 20 ) {
             damage*=2;
-            if ( target.atk_debuff != FULL ) loglog("CRITICAL HIT!: ", 0);
+            if ( target.atk_debuff != FULL ) loglog("CRITICAL HIT: ", 0);
         }
 
         switch (target.atk_debuff) {
             case UNSET:
-                loglog(this->name + " attacked " + target.name + "! → -" + std::to_string(damage), 1);
+                loglog(this->name + " attacks " + target.name + " → " + std::to_string(damage) + " damage", 1);
                 break ;;
             case FAIL:
-                // loglog(target.name + " failed to block " + this->name + "'s attack! - " + std::to_string(damage), 1);
-                loglog(this->name + " attacked " + target.name + ", who tried to block and failed! → -" + std::to_string(damage), 1);
+                loglog(this->name + " attacks " + target.name + ", who tried to block and failed → " + std::to_string(damage) + " damage", 1);
                 break ;;
             case PARTIAL:
                 damage/=2;
-                // loglog(target.name + " partially blocked " + this->name + "'s attack! - " + std::to_string(damage), 1);
-                loglog(this->name + " attacked " + target.name + ", who partially blocked the attack! → -" + std::to_string(damage), 1);
+                loglog(this->name + " attacks " + target.name + ", who partially blocked the attack → " + std::to_string(damage) + " damage", 1);
                 break ;;
             case FULL:
                 damage = 0;
-                // loglog(target.name + " succesfully blocked " + this->name + "'s attack!", 1);
-                loglog(this->name + " attacked " + target.name + ", but it was blocked! → -" + std::to_string(damage), 1);
+                loglog(this->name + " attacks " + target.name + ", but it was blocked → " + std::to_string(damage) + " damage", 1);
                 break ;;
         }
         target.health -= damage;
@@ -56,7 +53,7 @@ void Warrior::defend() {
     else if (roll == 20) { outcome = FULL; }
     else { outcome = PARTIAL; }
     this->atk_debuff = outcome;
-    loglog( this->name + " enters defense stance!", 1);
+    loglog( this->name + " enters defense stance", 1);
 }
 
 void Warrior::heal() {
@@ -68,7 +65,7 @@ void Warrior::heal() {
 
     if ( hp > max_hp) this->health = max_hp;
 
-    loglog( this->name + " heals " + std::to_string(roll), 1);
+    loglog( this->name + " heals " + std::to_string(roll) + " health", 1);
 
 }
 
@@ -107,28 +104,27 @@ void Arena::combat(){
 
     while ( a->health > 0 || b->health > 0 ) {
 
-        usleep(100000);
         a->afflict(rand_action(), *b);
         if (check_death(*b)) {
-            std::cout << a->name << " is declared the winner!" << '\n';
-            this->scoreboard();
+            std::cout << a->name;
             break;
         }
 
-        usleep(500000);
         b->afflict(rand_action(), *a);
         if (check_death(*a)) {
-            std::cout << a->name << " is declared the winner!" << '\n';
-            this->scoreboard();
+            std::cout << b->name;
             break;
         }
-        usleep(500000);
 
+        usleep(1000000);
         this->scoreboard();
 
         a->reset_debuff();
         b->reset_debuff();
+        usleep(2000000);
     }
+    std::cout << " is declared the winner!" << '\n';
+    this->scoreboard();
 }
 
 void Arena::scoreboard() {
