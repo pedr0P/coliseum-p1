@@ -31,10 +31,14 @@ enum def_stat {
     PARTIAL,
     FULL
 };
-
 enum player {
     PONE,
     PTWO
+};
+enum column {
+    HUD_NAME,
+    HUD_HEALTH,
+    HUD_LIFE_STATUS
 };
 
 class Warrior {
