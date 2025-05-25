@@ -1,8 +1,6 @@
 #include "battle.h"
 #include <random>
 #include <iostream>
-#include <string>
-#include <ctime>
 #include <unistd.h>
 
 void loglog(std::string output, short newline) {
@@ -10,36 +8,40 @@ void loglog(std::string output, short newline) {
     else std::cout << output;
 }
 
-void Warrior::reset_debuff() { this->atk_debuff = UNSET; }
+void Warrior::reset_defense() {
+    this->block = UNSET;
+}
 
 void Warrior::attack(Warrior &target) {
     int roll = RNG(1, 20);
 
-    if ( roll == 1 ) {
-        loglog(this->name + " missed " + target.name, 1);
+    /// Three possibilities here: A Miss, a hit, or a double damage hit.
+    if ( roll == NAT_FAIL ) {
+        loglog(this->name + " missed " + target.name, true);
     }
     else {
         int damage = RNG(1, 10)+(this->stat_stats[STRENGTH] * 2);
 
-        if ( roll == 20 ) {
+        if ( roll == NAT_FAIL ) {
             damage*=2;
-            if ( target.atk_debuff != FULL ) loglog("CRITICAL HIT: ", 0);
+            if ( target.block != FULL ) loglog("CRITICAL HIT: ", false);
         }
 
-        switch (target.atk_debuff) {
-            case UNSET:
-                loglog(this->name + " attacks " + target.name + " → " + std::to_string(damage) + " damage", 1);
+        /// If the target was blocking, depending on their blocking status the damage (and message) will be different.
+        switch (target.block) {
+            case UNSET: /// Not blocking
+                loglog(this->name + " attacks " + target.name + " → " + std::to_string(damage) + " damage", true);
                 break ;;
-            case FAIL:
-                loglog(this->name + " attacks " + target.name + ", who tried to block and failed → " + std::to_string(damage) + " damage", 1);
+            case NONE: /// Failed blocking
+                loglog(this->name + " attacks " + target.name + ", who tried to block and failed → " + std::to_string(damage) + " damage", true);
                 break ;;
-            case PARTIAL:
+            case PARTIAL: /// Succesful blocking
                 damage/=2;
-                loglog(this->name + " attacks " + target.name + ", who partially blocked the attack → " + std::to_string(damage) + " damage", 1);
+                loglog(this->name + " attacks " + target.name + ", who partially blocked the attack → " + std::to_string(damage) + " damage", true);
                 break ;;
-            case FULL:
+            case FULL: /// VERY Succesful blocking
                 damage = 0;
-                loglog(this->name + " attacks " + target.name + ", but it was blocked → " + std::to_string(damage) + " damage", 1);
+                loglog(this->name + " attacks " + target.name + ", but it was blocked → " + std::to_string(damage) + " damage", true);
                 break ;;
         }
         target.health -= damage;
@@ -47,25 +49,31 @@ void Warrior::attack(Warrior &target) {
 }
 
 void Warrior::defend() {
+    /// Leave it to chance whether blocking works.
     int roll = RNG(1, 20);
     def_stat outcome;
-    if ( roll == 1 ) { outcome = FAIL; }
+
+    if ( roll == 1 ) { outcome = NONE; }
     else if (roll == 20) { outcome = FULL; }
     else { outcome = PARTIAL; }
-    this->atk_debuff = outcome;
-    loglog( this->name + " enters defense stance", 1);
+
+    this->block = outcome;
+
+    loglog( this->name + " enters defense stance.", true);
 }
 
 void Warrior::heal() {
+    /// Leave it to chance how much healing will heal (healing stat will help, though).
     int roll = RNG(1, 20);
-    this-> health += roll;
+    this-> health += roll + (this->stat_stats[HEALING] * 2);
 
+    /// Check whether the health added exceeds max health.
     stat hp = this->health;
     stat max_hp = this->max_health;
 
     if ( hp > max_hp) this->health = max_hp;
 
-    loglog( this->name + " heals " + std::to_string(roll) + " health", 1);
+    loglog( this->name + " heals " + std::to_string(roll) + " health", true);
 
 }
 
@@ -83,15 +91,16 @@ void Warrior::afflict(action choice, Warrior &target){
     }
 }
 
-void Arena::combat(){
-    Warrior* a = this->list_of_warriors[PONE];
-    Warrior* b = this->list_of_warriors[PTWO];
+void Arena::combat() {
+    auto warriors = this->list_of_warriors;
 
+    /// Function to check if the warrior died from the attack.
     auto check_death = [] (Warrior a) -> bool {
         if (a.health < 0) return true;
         return false;
     };
 
+    /// Make Attacking more common than Healing or Defending.
     auto rand_action = [] () -> action {
         int rand = RNG(1, 3);
         if ( rand <= 2 ) return ATTACK;
@@ -102,25 +111,35 @@ void Arena::combat(){
         }
     };
 
-    while ( a->health > 0 || b->health > 0 ) {
+    while ( warriors[PONE]->health > 0 || warriors[PTWO]->health > 0 ) {
 
-        a->afflict(rand_action(), *b);
-        if (check_death(*b)) {
-            std::cout << a->name;
+        /// Decide which player goes first.
+        player first = (player)RNG(PONE, PTWO);
+        short last;
+
+        if ( first == PONE ) last = PTWO;
+        else last = PONE;
+
+        warriors[first]->afflict(rand_action(), *warriors[last]);
+        if (check_death(*warriors[last])) {
+            std::cout << warriors[first]->name;
             break;
         }
 
-        b->afflict(rand_action(), *a);
-        if (check_death(*a)) {
-            std::cout << b->name;
+        warriors[last]->afflict(rand_action(), *warriors[first]);
+        if (check_death(*warriors[first])) {
+            std::cout << warriors[last]->name;
             break;
         }
 
+        /// Wait 1 second before continuing.
         usleep(1000000);
         this->scoreboard();
 
-        a->reset_debuff();
-        b->reset_debuff();
+        warriors[first]->reset_defense();
+        warriors[last]->reset_defense();
+
+        /// Wait 2 seconds before continuing.
         usleep(2000000);
     }
     std::cout << " is declared the winner!" << '\n';
@@ -128,6 +147,7 @@ void Arena::combat(){
 }
 
 void Arena::scoreboard() {
+    /// Even formatting of strings using spaces
     auto str_format = [] ( std::string content, column col ) -> std::string {
         std::string spaces{content};
         switch (col) {
@@ -149,10 +169,13 @@ void Arena::scoreboard() {
         };
         return spaces;
     };
+    
+    /// The attack can bring health to negative, but that looks ugly to display.
     auto hp = [] ( Warrior *a) -> std::string {
         if (a->health < 0) return "0";
         else return std::to_string(a->health);
     };
+
     auto life = [] ( Warrior *a) -> std::string {
         if (a->health < 0) return "DEAD";
         else return "ALIVE";
@@ -170,9 +193,9 @@ void Arena::scoreboard() {
     }
 }
 
-int RNG(int min, int max){
+int RNG(int min, int max) {
     std::random_device dev;
     std::mt19937 random(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(min,max); // distribution in range [1, 6]
+    std::uniform_int_distribution<std::mt19937::result_type> dist(min,max);
     return dist(random);
 }

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "battle.cpp"
 
 int main(int argc, char* argv[]) {
