@@ -44,10 +44,16 @@ enum player {
     PTWO /**< Player Two */
 };
 
-/** Indicates a guaranteed FAIL or CRIT */
+/** Enum that indicates a guaranteed FAIL or CRIT */
 enum roll_status {
     NAT_FAIL = 1, /**< 1 */
     NAT_CRIT = 20 /**< 20 */
+};
+
+/** Enum that indicates TRUE or FALSE */
+enum boolean {
+    FALSE,
+    TRUE
 };
 
 
@@ -153,7 +159,7 @@ public:
  * @param output A string with what will be sent to STDOUT.
  * @param newline A boolean indicating if a newline should be included.
 */
-void loglog(std::string output, bool newline);
+void loglog(std::string output, boolean newline);
 
 /** Random Number Generator
  * @detail Randomly generate a number in the indicated range.

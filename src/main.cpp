@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
     Warrior b;
     b.name = "Batman";
     b.health = 30;
-    b.stat_stats = { 5, 2, 5 };
+    b.stat_stats = { 5, 5, 5 };
 
     Arena coliseum;
     coliseum.list_of_warriors = { &a, &b };

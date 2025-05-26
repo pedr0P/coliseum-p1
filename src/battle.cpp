@@ -3,8 +3,8 @@
 #include <iostream>
 #include <unistd.h>
 
-void loglog(std::string output, short newline) {
-    if (newline) std::cout << output << '\n';
+void loglog(std::string output, bool newline) {
+    if (newline) std::cout << ">>> "<< output << '\n';
     else std::cout << output;
 }
 
@@ -22,7 +22,7 @@ void Warrior::attack(Warrior &target) {
     else {
         int damage = RNG(1, 10)+(this->stat_stats[STRENGTH] * 2);
 
-        if ( roll == NAT_FAIL ) {
+        if ( roll == NAT_CRIT ) {
             damage*=2;
             if ( target.block != FULL ) loglog("CRITICAL HIT: ", false);
         }
@@ -44,13 +44,14 @@ void Warrior::attack(Warrior &target) {
                 loglog(this->name + " attacks " + target.name + ", but it was blocked → " + std::to_string(damage) + " damage", true);
                 break ;;
         }
+        target.reset_defense();
         target.health -= damage;
     }
 }
 
 void Warrior::defend() {
-    /// Leave it to chance whether blocking works.
-    int roll = RNG(1, 20);
+    /// Leave it to somewhat random chance whether blocking works.
+    int roll = RNG(1, 20) + (this->stat_stats[DEFENSE]);
     def_stat outcome;
 
     if ( roll == 1 ) { outcome = NONE; }
@@ -136,9 +137,6 @@ void Arena::combat() {
         usleep(1000000);
         this->scoreboard();
 
-        warriors[first]->reset_defense();
-        warriors[last]->reset_defense();
-
         /// Wait 2 seconds before continuing.
         usleep(2000000);
     }
@@ -181,16 +179,20 @@ void Arena::scoreboard() {
         else return "ALIVE";
     };
 
+    std::cout << " -----------------------------------\n";
     for (size_t i{0}; i < list_of_warriors.size(); ++i) {
         Warrior *player = this->list_of_warriors[i];
         std::cout
+            << "| "
             << str_format(player->name, HUD_NAME)
             << " | "
             << str_format(hp(player), HUD_HEALTH)
             << " | "
             << str_format(life(player), HUD_LIFE_STATUS)
+            << " |"
             << '\n';
     }
+    std::cout << " -----------------------------------\n\n";
 }
 
 int RNG(int min, int max) {
