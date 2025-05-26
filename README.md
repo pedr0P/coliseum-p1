@@ -21,5 +21,5 @@ Using g++ (or clangd):
 ```
 # Output
   In the beginning, the user will fill some fields with data like maximum health, health, strength, etc...<br>
-After these fields for both players have been filled up, the game will start, and using the inputted values
-and a random number generator, the "warriors" will fight each other to the death.
+After these fields (for both warriors) have been filled up, the game will start, and, using the inputted values
+and a random number generator, the warriors will fight each other to the death.
