@@ -20,6 +20,6 @@ Using g++ (or clangd):
     g++ -std=c++20 -o coliseum-p1 src/main.cp
 ```
 # Output
-  In the beginning, the user will fill some fields with data like maximum health, health, strength, etc...
+  In the beginning, the user will fill some fields with data like maximum health, health, strength, etc...<br>
 After these fields for both players have been filled up, the game will start, and using the inputted values
 and a random number generator, the "warriors" will fight each other to the death.
