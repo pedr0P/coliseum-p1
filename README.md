@@ -15,7 +15,7 @@ and healing be out of 5, but ultimately, the choice is yours!
 Pedro Vinícius Barbosa Pereira
 
 # Compilation and Execution
-Using g++ or clangd:
+Using g++ (or clangd):
 ``` bash
     g++ -std=c++20 -o coliseum-p1 src/main.cp
 ```
