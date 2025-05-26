@@ -1,3 +1,10 @@
+/*!
+ * @file battle.h
+ * @description Describes the signature of enums, classes, methods and functions for the game. 
+ * @author Pedro V. B. Pereira
+ * @date   May 25th, 2025.
+*/
+
 #include <array>
 #include <string>
 

@@ -1,3 +1,10 @@
+/*!
+ * @file battle.cpp
+ * @description Implements the functions from battle.h
+ * @author Pedro V. B. Pereira
+ * @date   May 25th, 2025.
+*/
+
 #include "battle.h"
 #include <cstdlib>
 #include <random>

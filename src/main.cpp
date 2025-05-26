@@ -1,3 +1,10 @@
+/*!
+ * @file main.cpp
+ * @description This is more of a wrapper to other functions in this little game.
+ * @author Pedro V. B. Pereira
+ * @date   May 25th, 2025.
+*/
+
 #include "battle.cpp"
 #include <iostream>
 
