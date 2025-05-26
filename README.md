@@ -2,9 +2,9 @@
   This is a little game made in C++ for my programming class.
 It takes two warriors and pairs them up against each other, using some rules akin to Dungeons and Dragons,
 where a random number between 1 and 20 will yield different results.
-> 1                   → Always the worst result
-> Anything in between → Decent result
-> 20                  → Always the best result
+> 1                   → Always the worst result <br>
+> Anything in between → Decent result <br>
+> 20                  → Always the best result <br>
 
 # How to Play:
   Input the values you would like for two warriors. It is recommended that health be out of 100, and that strength, defense
