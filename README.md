@@ -11,9 +11,6 @@ where a random number between 1 and 20 will yield different results.
 and healing be out of 5, but ultimately, the choice is yours!
 (OBS: Max health needs to be more than health)
   
-# Authors
-Pedro Vinícius Barbosa Pereira
-
 # Compilation and Execution
 Using g++ (or clangd):
 ``` bash
@@ -23,3 +20,7 @@ Using g++ (or clangd):
   In the beginning, the user will fill some fields with data like maximum health, health, strength, etc...<br>
 After these fields (for both warriors) have been filled up, the game will start, and, using the inputted values
 and a random number generator, the warriors will fight each other to the death.
+
+
+# Authors
+Pedro Vinícius Barbosa Pereira
