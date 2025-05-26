@@ -1,4 +1,5 @@
 #include "battle.h"
+#include <cstdlib>
 #include <random>
 #include <iostream>
 #include <unistd.h>
@@ -50,12 +51,13 @@ void Warrior::attack(Warrior &target) {
 }
 
 void Warrior::defend() {
-    /// Leave it to somewhat random chance whether blocking works.
-    int roll = RNG(1, 20) + (this->stat_stats[DEFENSE]);
+    /// Leave it to somewhat random chance whether blocking works (Defense stat helps).
+    short bias = this->stat_stats[DEFENSE];
+    int roll = RNG(1, 20) + (bias);
     def_stat outcome;
 
-    if ( roll == 1 ) { outcome = NONE; }
-    else if (roll == 20) { outcome = FULL; }
+    if ( roll == NAT_FAIL - bias ) { outcome = NONE; }
+    else if (roll == NAT_CRIT - bias ) { outcome = FULL; }
     else { outcome = PARTIAL; }
 
     this->block = outcome;
@@ -133,12 +135,12 @@ void Arena::combat() {
             break;
         }
 
-        /// Wait 1 second before continuing.
-        usleep(1000000);
         this->scoreboard();
+        std::cout << ">>> continue... <<<\n";
+        std::cin.get();
 
-        /// Wait 2 seconds before continuing.
-        usleep(2000000);
+        /// Wait 4 seconds before continuing.
+        // usleep(4000000);
     }
     std::cout << " is declared the winner!" << '\n';
     this->scoreboard();
