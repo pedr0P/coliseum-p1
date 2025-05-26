@@ -1,3 +1,5 @@
+> This was my initial plan, but i didn't really follow it that well:
+
 # Data
 ## Types
   - Stat
