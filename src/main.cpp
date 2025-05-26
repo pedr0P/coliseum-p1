@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
         while (1) {
             std::cout << "| Max health: ";
             std::cin >> x.max_health;
-            std::cout << "|     health: ";
+            std::cout << "|     Health: ";
             std::cin >> x.health;
 
             if ( x.health > x.max_health ) {
@@ -32,6 +32,8 @@ int main(int argc, char* argv[]) {
     input_processer(a);
     std::cout << "Player TWO:\n";
     input_processer(b);
+
+    std::cin.get();
 
     // a.name = "Batman";
     // a.max_health = 120;
