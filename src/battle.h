@@ -83,12 +83,12 @@ public:
     /** Warrior's Max Health.
      * Default set by main/user.
     */
-    stat max_health{100};
+    signed max_health{1};
 
     /** Warrior's Current Health.
      * Default set by Warrior's Max Health.
     */
-    signed health = max_health;
+    signed health;
 
     /** Warrior's Static Stats.
      * Static Stats: Strength, Defense, and Healing (All out of 5).
